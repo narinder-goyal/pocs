@@ -1,169 +1,131 @@
 dhinote-poc/
- ├─ app/
- │   ├─ (auth)/
- │   │   ├─ login/
- │   │   │   └─ page.tsx
- │   │   └─ signup/
- │   │       └─ page.tsx
- │   │
- │   ├─ api/
- │   │   └─ upload/
- │   │       └─ route.ts
- │   │
- │   ├─ dashboard/
- │   │   ├─ layout.tsx
- │   │   └─ page.tsx
- │   │
- │   ├─ layout.tsx
- │   └─ page.tsx
- │
- ├─ components/
- │   ├─ ui/
- │   │   ├─ button.tsx
- │   │   └─ input.tsx
- │   │
- │   ├─ layout/
- │   │   ├─ Navbar.tsx
- │   │   └─ Footer.tsx
- │   │
- │   ├─ auth/
- │   │   └─ SignOutButton.tsx
- │   │
- │   └─ forms/
- │       ├─ LoginForm.tsx
- │       └─ SignUpForm.tsx
- │
- ├─ config/
- │
- ├── firebase/
- │   └── config.ts
- │
- ├─ lib/
- │   ├─ redux/
- │   │   ├─ auth/
- │   │   │   ├─ authSlice.ts
- │   │   │   └─ authApi.ts 
- │   │   └─ index.ts
- │   │
- │   ├─ StoreProvider.tsx
- │   └─ store.ts
- │
- ├─ hooks/
- │   └─ useAuth.ts
- │
- ├─ services/
- │   └─ auth.service.ts
- │
- ├─ store/
- │   └─ user.store.ts
- │
- ├─ schemas/
- │   ├─ login.schema.ts ---------------> YUP validation for login
- │   └─ signup.schema.ts ---------------> YUP validation for sign up
- │
- ├─ utils/
- │   ├─ date.ts
- │   ├─ validators.ts
- │   └─ constants.ts
- │
- ├─ types/
- │   └─ user.ts
- │
- ├─ styles/
- │   └─ globals.css
- │
- ├─ middleware.ts
- ├─ .env
-
-
-
-
+├─ app/
+│  ├─ (auth)/
+│  │  ├─ login/
+│  │  │  └─ page.tsx
+│  │  └─ signup/
+│  │     └─ page.tsx
+│  │
+│  ├─ api/
+│  │  └─ auth/
+│  │     └─ [...nextauth]/
+│  │        └─ route.ts
+│  │
+│  ├─ dashboard/
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  │
+│  ├─ layout.tsx
+│  └─ page.tsx
+│
+├─ components/
+│  ├─ ui/
+│  │  ├─ input.tsx
+│  │  └─ button.tsx
+│  │
+│  ├─ forms/
+│  │  ├─ LoginForm.tsx
+│  │  └─ SignUpForm.tsx
+│  │
+│  └─ auth/
+│     └─ SignOutButton.tsx
+│
+├─ lib/
+│  ├─ redux/
+│  │  ├─ auth/
+│  │  │  ├─ authApi.ts
+│  │  │  └─ authSlice.ts
+│  │  └─ store.ts
+│  │
+│  └─ StoreProvider.tsx
+│
+├─ services/
+│  └─ auth.service.ts
+│
+├─ schemas/
+│  ├─ login.schema.ts
+│  └─ signup.schema.ts
+│
+├─ types/
+│  └─ user.ts
+│
+├─ styles/
+│  └─ globals.css
+│
+├─ proxy.ts
+├─ middleware.d.ts
+├─ .env
+├─ next.config.js
+└─ tsconfig.json
 --------------------------
 
 
 
-My mantor give me project.
-first now create project in react nextjs 16 (login , register , logout, dashboard), use next auth, store, rtk Query, api, api token to login, yap for validation, middleware, .env, tost for server Error msg like(invalid email or password, login Failed, Susscess Login) is there any tost in Nextjs use that. 
+My mentor give me project.
+first now create project in react nextjs 16 (login , register , logout, dashboard), use next auth, store, rtk Query, api, api token to login, yap for validation, middleware, .env, toast for server Error msg like(invalid email or password, login Failed, Susscess Login) is there any toast in Nextjs use that. 
 *after this done we will continue our dashboard page please do as professional way. 
  
 1.-> this is my folder structure, add or remove extra folder & file's as per code need. 
 
- dhinote-poc/
- ├─ app/
- │   ├─ (auth)/
- │   │   ├─ login/
- │   │   │   └─ page.tsx
- │   │   └─ signup/
- │   │       └─ page.tsx
- │   │
- │   ├─ api/
- │   │   └─ upload/
- │   │       └─ route.ts
- │   │
- │   ├─ dashboard/
- │   │   ├─ layout.tsx
- │   │   └─ page.tsx
- │   │
- │   ├─ layout.tsx
- │   └─ page.tsx
- │
- ├─ components/
- │   ├─ ui/
- │   │   ├─ button.tsx
- │   │   └─ input.tsx
- │   │
- │   ├─ layout/
- │   │   ├─ Navbar.tsx
- │   │   └─ Footer.tsx
- │   │
- │   ├─ auth/
- │   │   └─ SignOutButton.tsx
- │   │
- │   └─ forms/
- │       ├─ LoginForm.tsx
- │       └─ SignUpForm.tsx
- │
- ├─ config/
- │
- ├── firebase/
- │   └── config.ts
- │
- ├─ lib/
- │   ├─ redux/
- │   │   ├─ auth/
- │   │   │   ├─ authSlice.ts
- │   │   │   └─ authApi.ts 
- │   │   └─ index.ts
- │   │
- │   ├─ StoreProvider.tsx
- │   └─ store.ts
- │
- ├─ hooks/
- │   └─ useAuth.ts
- │
- ├─ services/
- │   └─ auth.service.ts
- │
- ├─ store/
- │   └─ user.store.ts
- │
- ├─ schemas/
- │   ├─ login.schema.ts
- │   └─ signup.schema.ts
- │
- ├─ utils/
- │   ├─ date.ts
- │   ├─ validators.ts
- │   └─ constants.ts
- │
- ├─ types/
- │   └─ user.ts
- │
- ├─ styles/
- │   └─ globals.css
- │
- ├─ middleware.ts
- ├─ .env
+dhinote-poc/
+├─ app/
+│  ├─ (auth)/
+│  │  ├─ login/
+│  │  │  └─ page.tsx
+│  │  └─ signup/
+│  │     └─ page.tsx
+│  │
+│  ├─ api/
+│  │  └─ auth/
+│  │     └─ [...nextauth]/
+│  │        └─ route.ts
+│  │
+│  ├─ dashboard/
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  │
+│  ├─ layout.tsx
+│  └─ page.tsx
+│
+├─ components/
+│  ├─ ui/
+│  │  ├─ input.tsx
+│  │  └─ button.tsx
+│  │
+│  ├─ forms/
+│  │  ├─ LoginForm.tsx
+│  │  └─ SignUpForm.tsx
+│  │
+│  └─ auth/
+│     └─ SignOutButton.tsx
+│
+├─ lib/
+│  ├─ redux/
+│  │  ├─ auth/
+│  │  │  ├─ authApi.ts
+│  │  │  └─ authSlice.ts
+│  │  └─ store.ts
+│  │
+│  └─ StoreProvider.tsx
+│
+├─ services/
+│  └─ auth.service.ts
+│
+├─ schemas/
+│  ├─ login.schema.ts
+│  └─ signup.schema.ts
+│
+├─ types/
+│  └─ user.ts
+│
+├─ styles/
+│  └─ globals.css
+│
+├─ proxy.ts
+├─ middleware.d.ts
+├─ .env
+├─ next.config.js
+└─ tsconfig.json
 
 2.-> for api https://gop-dev-api-dhinotem.agilecollab.com/api-docs/#/
 

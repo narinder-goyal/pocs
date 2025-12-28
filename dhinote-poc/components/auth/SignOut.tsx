@@ -1,8 +1,8 @@
-// 'use client';
+'use client';
 
-// import Button from '@/components/ui/Button';
-// import { useAuth } from '@/hooks/useAuth';
-// import { useRouter } from 'next/navigation';
+import { signOut } from "next-auth/react";
+import Button from '@/components/ui/Button';
+import { useRouter } from 'next/navigation';
 
 // const SignOutButton = () => {
 //   const { logout, loading } = useAuth();
@@ -24,3 +24,9 @@
 // };
 
 // export default SignOutButton;
+
+
+
+export default function SignOutButton() {
+    return <Button variant="outline" onClick={() => signOut({ callbackUrl: "/login" })}>Logout</Button>;
+}

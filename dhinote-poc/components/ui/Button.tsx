@@ -5,9 +5,11 @@ import clsx from 'clsx';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'outline';
+  loading?: boolean;
+
 }
 
-const Button: FC<Props> = ({ variant = 'primary', className, ...props }) => {
+const Button: FC<Props> = ({ variant = 'primary', loading, children, className, ...props }) => {
   const base =
     'px-4 py-2 rounded-md text-sm font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed';
   const variants: Record<string, string> = {
@@ -19,8 +21,10 @@ const Button: FC<Props> = ({ variant = 'primary', className, ...props }) => {
   return (
     <button
       className={clsx(base, variants[variant], className)}
-      {...props}
-    />
+      {...props} disabled={loading}
+      >
+      {loading ? "Please wait..." : children}
+    </button>
   );
 };
 
