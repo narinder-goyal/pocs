@@ -1,13 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { authApi } from "./redux/auth/authApi";
-import authReducer from "./redux/auth/authSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import userDataReducer from './redux/user/userSlice';
 
 export const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        [authApi.reducerPath]: authApi.reducer,
-    },
-    middleware: (gDM) => gDM().concat(authApi.middleware),
+  reducer: {
+    userData: userDataReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

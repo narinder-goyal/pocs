@@ -13,16 +13,17 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-    ({ label, error, type, showPasswordToggle, ...props }, ref) => {
+    ({ label, error, type, showPasswordToggle, className = '', ...props }, ref) => {
         const [show, setShow] = useState(false);
         const inputType = type === "password" && showPasswordToggle ? (show ? "text" : "password") : type;
+        const borderClass = error ? 'border-red-500' : 'border-gray-300';
 
 
         return (
             <div>
-                {label && <label className="block text-sm">{label}</label>}
+                {label && <label htmlFor={label} className="block text-sm">{label}</label>}
                 <div className="relative">
-                    <input ref={ref} type={inputType} {...props} className="w-full border p-2 rounded" />
+                    <input id={label} className={`w-full border p-2 rounded ${borderClass} ${className}`} type={inputType} ref={ref} {...props} />
                     {type === "password" && showPasswordToggle && (
                         <button type="button" onClick={() => setShow(!show)} className="absolute right-3 top-2">
                             {show ? <EyeOff size={16} /> : <Eye size={16} />}

@@ -1,40 +1,58 @@
-import { API_BASE_URL } from "@/utils/constants";
+import { getPublicToken } from '@/lib/publicToken';
 
-export async function generatePublicToken() {
-  const res = await fetch(`${API_BASE_URL}/api/v1/auth/public-api/token`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-    }),
-  });
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
 
-  if (!res.ok) throw new Error("Public token failed");
-  return res.json();
+const jsonHeaders = { 'Content-Type': 'application/json' };
+
+export interface RegisterPayload {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+    phone?: string;
+    timezone?: string;
 }
 
+export interface LogoutPayload {
+    device_token: string;
+    logout_all: boolean;
+}
 
-export async function registerUser(payload: any) {
-  const token = await generatePublicToken();
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/register`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token.access_token}`,
-      },
-      body: JSON.stringify(payload),
+async function handleResponse(res: Response) {
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+        throw new Error(data?.message || data?.error || 'Request failed');
     }
-  );
+    return data;
+}
 
-  const data = await res.json();
+export async function registerUser(payload: RegisterPayload) {
+    const publicToken = await getPublicToken();
 
-  if (!res.ok) {
-    throw new Error(data?.message || "Registration failed");
-  }
+    const res = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
+        method: 'POST',
+        headers: {
+            ...jsonHeaders,
+            Authorization: `Bearer ${publicToken}`,
+        },
+        body: JSON.stringify(payload),
+    });
 
-  return data;
+    return handleResponse(res);
+}
+
+export async function logoutBackend(
+    accessToken: string,
+    payload: LogoutPayload,
+) {
+    const res = await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+        method: 'POST',
+        headers: {
+            ...jsonHeaders,
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+    });
+
+    return handleResponse(res);
 }

@@ -1,32 +1,37 @@
 'use client';
 
-import { signOut } from "next-auth/react";
 import Button from '@/components/ui/Button';
-import { useRouter } from 'next/navigation';
-
-// const SignOutButton = () => {
-//   const { logout, loading } = useAuth();
-//   const router = useRouter();
-
-//   const handleClick = async () => {
-//     try {
-//       await logout({ device_token: 'web', logout_all: false });
-//     } finally {
-//       router.push('/login');
-//     }
-//   };
-
-//   return (
-//     <Button variant="outline" onClick={handleClick} disabled={loading}>
-//       Logout
-//     </Button>
-//   );
-// };
-
-// export default SignOutButton;
-
-
+import { useSession, signOut } from 'next-auth/react';
+import { logoutBackend } from '@/services/auth.service';
 
 export default function SignOutButton() {
-    return <Button variant="outline" onClick={() => signOut({ callbackUrl: "/login" })}>Logout</Button>;
+    const { data: session } = useSession();
+
+    const handleClick = async () => {
+        const accessToken = (session as any)?.accessToken;
+
+        try {
+            if (accessToken) {
+                await logoutBackend(accessToken, {
+                    device_token: 'web',
+                    logout_all: false,
+                });
+            }
+        }
+        catch { }
+        finally {
+            await signOut({ callbackUrl: '/login' });
+        }
+    };
+
+    return (
+        <Button variant="outline" onClick={handleClick}>
+            Logout
+        </Button>
+    );
 }
+
+
+// export default function SignOutButton() {
+//     return <Button variant="outline" onClick={() => signOut({ callbackUrl: "/login" })}>Logout</Button>;
+// }

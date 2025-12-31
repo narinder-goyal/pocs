@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from 'next/font/google';
 
+
+import { Toaster } from "react-hot-toast";
+import SessionProvider from '@/components/SessionProvider';
+import StoreProvider from "@/lib/StoreProvider";
 import "@/styles/globals.css";
 
-import StoreProvider from "@/lib/StoreProvider";
-import { Toaster } from "react-hot-toast";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -24,13 +26,15 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
       <body
         className={`${plusJakarta.variable} antialiased`}
       >
-        <StoreProvider>
-          <main className="min-h-screen flex items-center bg-[linear-gradient(0deg,_#ffffff,_#ffffff),radial-gradient(50%_50%_at_50%_50%,rgba(42,202,167,0.1)_0%,rgba(42,202,167,0)_100%)]">
-            {children}
-            <Toaster position="top-right" />
+        <SessionProvider>
+          <StoreProvider>
+            <main className="min-h-screen flex items-center bg-linear-gradient">
+              {children}
+              <Toaster position="top-right" />
 
-          </main>
-        </StoreProvider>
+            </main>
+          </StoreProvider>
+        </SessionProvider>
       </body>
     </html>
   );

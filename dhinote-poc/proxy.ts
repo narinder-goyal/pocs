@@ -1,52 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getToken } from 'next-auth/jwt';
+export async function proxy(req: NextRequest) {
 
-export function proxy(req: NextRequest) {
-  const token =
-    req.cookies.get("next-auth.session-token") ||
-    req.cookies.get("__Secure-next-auth.session-token");
+  const token = await getToken({ req });
+  const pathname = req.nextUrl.pathname;
+  const isFirstTimeLoggedIn = (token?.user as any)?.is_first_time_logged_in;
 
-  if (!token && req.nextUrl.pathname.startsWith("/dashboard")) {
+  console.log("path name",pathname)
+  if (!token && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (token && !isFirstTimeLoggedIn && !pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
+  } 
+  
+  if (token && isFirstTimeLoggedIn && pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/intract", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/intract/:path*"],
 };
-
-
-// import { NextResponse } from "next/server";
-// import type { NextRequest } from "next/server";
-
-// export function proxy(req: NextRequest) {
-//   console.log("hi")
-//   const { pathname } = req.nextUrl;
-//   const accessToken = req.cookies.get('accessToken')?.value;
-//   console.log("accessToken", accessToken)
-//   if (pathname.includes('/dashboard') && !accessToken) {
-//     const url = req.nextUrl.clone();
-//     url.pathname = '/login';
-//     return NextResponse.redirect(url);
-//   }
-
-//   if (
-//     accessToken &&
-//     (pathname === '/' ||
-//       pathname.startsWith('/login') ||
-//       pathname.startsWith('/signup'))
-//   ) {
-//     const url = req.nextUrl.clone();
-//     url.pathname = '/dashboard';
-//     return NextResponse.redirect(url);
-//   }
-
-
-//   return NextResponse.next();
-// }
-
-// export const config = {
-//   matcher: ['/dashboard/:path*', '/login', '/signup', '/'],
-// };
 
