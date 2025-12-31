@@ -12,7 +12,7 @@ interface ModalProps {
     secondaryActionLabel?: string;
 }
 
-export default function Modal({
+export default function SideModal({
     isOpen,
     onClose,
     title,
@@ -46,28 +46,25 @@ export default function Modal({
     };
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-            onClick={handleBackdropClick}
-        >
-            <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <div className="mb-3 flex items-center justify-between">
-                    {title && (
+        <div className="fixed inset-0 z-50 flex items-strach justify-end bg-black/40" onClick={handleBackdropClick} >
+            <div className="w-full max-w-[716px] rounded-tl-[12px] rounded-bl-[12px] bg-white p-8 pl-5 shadow-lg">
+                {title && (
+                    <div className="pb-8 flex items-center justify-start gap-1">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="text-gray-400 hover:text-gray-600"
+                            aria-label="Close"
+                        >
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0_323_23175)"><path d="M20.5465 9.88L18.6665 8L10.6665 16L18.6665 24L20.5465 22.12L14.4398 16L20.5465 9.88Z" fill="#777777" /></g><defs><clipPath id="clip0_323_23175"><rect width="32" height="32" fill="white" /></clipPath></defs></svg>
+                        </button>
                         <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-                    )}
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600"
-                        aria-label="Close"
-                    >
-                        ×
-                    </button>
-                </div>
+                    </div>
+                )}
 
-                <div className="mb-4 text-sm text-gray-700">{children}</div>
+                {children}
 
-                <div className="flex justify-end gap-2">
+                {/* <div className="flex justify-end gap-2">
                     <button
                         type="button"
                         onClick={onClose}
@@ -84,7 +81,7 @@ export default function Modal({
                             {primaryActionLabel}
                         </button>
                     )}
-                </div>
+                </div> */}
             </div>
         </div>
     );

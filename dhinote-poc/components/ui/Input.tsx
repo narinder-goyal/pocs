@@ -21,7 +21,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
         return (
             <div>
-                {label && <label htmlFor={label} className="block text-sm">{label}</label>}
+                {label && <label htmlFor={label} className="block text-sm mb-2">{label}</label>}
                 <div className="relative">
                     <input id={label} className={`w-full border p-2 rounded ${borderClass} ${className}`} type={inputType} ref={ref} {...props} />
                     {type === "password" && showPasswordToggle && (
