@@ -1,6 +1,5 @@
+import { API_BASE_URL, API_ROUTES } from "@/utils/constants";
 import { getPublicToken } from '@/lib/publicToken';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ;
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
@@ -29,7 +28,7 @@ async function handleResponse(res: Response) {
 export async function registerUser(payload: RegisterPayload) {
     const publicToken = await getPublicToken();
 
-    const res = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
+    const res = await fetch(`${API_BASE_URL}${API_ROUTES.REGISTER}`, {
         method: 'POST',
         headers: {
             ...jsonHeaders,
@@ -45,7 +44,7 @@ export async function logoutBackend(
     accessToken: string,
     payload: LogoutPayload,
 ) {
-    const res = await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+    const res = await fetch(`${API_BASE_URL}${API_ROUTES.LOGOUT}`, {
         method: 'POST',
         headers: {
             ...jsonHeaders,

@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL, API_ROUTES } from "@/utils/constants";
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 

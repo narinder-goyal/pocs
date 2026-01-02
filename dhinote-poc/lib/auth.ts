@@ -2,7 +2,9 @@ import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { getPublicToken } from '@/lib/publicToken';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { API_BASE_URL, API_ROUTES } from "@/utils/constants";
+
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -22,7 +24,7 @@ export const authOptions: NextAuthOptions = {
                     const publicToken = await getPublicToken();
                     
                     // 2) Call backend login
-                    const loginUrl = `${API_BASE_URL}/api/v1/auth/login`;
+                    const loginUrl = `${API_BASE_URL}${API_ROUTES.LOGIN}`;
 
                     const res = await fetch(loginUrl, {
                         method: 'POST',

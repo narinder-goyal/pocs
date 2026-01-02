@@ -1,6 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-const CLIENT_ID = process.env.NEXT_PUBLIC_API_CLIENT_ID;
-const CLIENT_SECRET = process.env.NEXT_PUBLIC_API_CLIENT_SECRET;
+import { API_BASE_URL, CLIENT_ID, CLIENT_SECRET, API_ROUTES } from "@/utils/constants";
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
@@ -12,7 +10,7 @@ export async function getPublicToken(): Promise<string> {
     }
 
     const res = await fetch(
-        `${API_BASE_URL}/api/v1/auth/public-api/token`,
+        `${API_BASE_URL}${API_ROUTES.PUBLIC_TOKEN}`,
         {
             method: 'POST',
             headers: jsonHeaders,

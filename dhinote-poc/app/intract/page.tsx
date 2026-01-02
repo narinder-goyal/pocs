@@ -38,11 +38,7 @@ export default async function DashboardPage() {
       </div>
 
       <TopicForm />
-      <div className='p-[14px]'>
-        <Link href="/dashboard" className="flex items-center gap-2">Skip for Now
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0)"><path d="M7 7H17V10L21 6L17 2V5H5V11H7V7ZM17 17H7V14L3 18L7 22V19H19V13H17V17Z" fill="#606060" /></g><defs><clipPath id="clip0"> <rect width="24" height="24" fill="white" /> </clipPath></defs></svg>
-        </Link>
-      </div>
+      
 
     </div>
   )
