@@ -8,7 +8,7 @@ export default function SignOutButton() {
     const { data: session } = useSession();
 
     const handleClick = async () => {
-        const accessToken = (session as any)?.accessToken;
+        const accessToken = session?.user.access_token;
 
         try {
             if (accessToken) {

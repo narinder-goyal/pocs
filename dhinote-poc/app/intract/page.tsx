@@ -1,10 +1,10 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { redirect } from 'next/navigation';
-import SignOutButton from '@/components/auth/SignOut';
 import Link from 'next/link';
 import Image from 'next/image';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import TopicForm from '@/components/forms/TopicForm';
+import SignOutButton from '@/components/auth/SignOut';
 
 export default async function DashboardPage() {
 
@@ -16,7 +16,8 @@ export default async function DashboardPage() {
     redirect('/login');
   }
 
-  const user = session.user as any;
+  const user = session.user;
+
   return (
     <div className="w-full max-w-[520px] mx-auto flex flex-col items-center">
       {/* Intract ----- {user?.first_name} {user?.last_name} */}

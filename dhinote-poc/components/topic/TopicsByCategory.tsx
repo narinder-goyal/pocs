@@ -1,17 +1,20 @@
 'use client';
 
 import type { DefaultTopicsCategory } from '@/services/topic.service';
+import Button from '../ui/Button';
 
 interface TopicsByCategoryProps {
     categories?: DefaultTopicsCategory[];
     selectedTopicIds: number[];
     onToggleTopic: (id: number) => void;
+    onAddTopicOnPage: () => void;
 }
 
 export default function TopicsByCategory({
     categories = [],
     selectedTopicIds,
     onToggleTopic,
+    onAddTopicOnPage,
 }: TopicsByCategoryProps) {
     if (!categories.length) {
         return (
@@ -66,6 +69,14 @@ export default function TopicsByCategory({
                     )}
                 </div>
             ))}
+            {selectedTopicIds.length > 0 && (
+                <Button
+                    type="button" className="mt-8"
+                    onClick={onAddTopicOnPage}
+                >
+                    Done
+                </Button>
+            )}
         </div>
     );
 }

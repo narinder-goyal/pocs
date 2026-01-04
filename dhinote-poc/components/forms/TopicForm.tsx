@@ -37,6 +37,7 @@ export default function TopicForm({
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTopicIds, setSelectedTopicIds] = useState<number[]>([]);
+    const [appliedTopicIds, setAppliedTopicIds] = useState<number[]>([]);
 
     const { data: session } = useSession();
     const accessToken = (session as any)?.user?.accessToken;
@@ -44,16 +45,16 @@ export default function TopicForm({
     const [topics, setTopics] = useState<DefaultTopic[]>(initialTopics);
     const [categories, setCategories] = useState<DefaultTopicsCategory[]>(initialCategories);
 
-    console.log("session   -> ", session)
+    // console.log("session   -> ", session)
 
     const fechDefTopic = async () => {
-        console.log("accessToken -> ", accessToken);
+        // console.log("accessToken -> ", accessToken);
 
         const categoriesRes = await fetchDefaultTopicCategories(accessToken);
         const topicsRes = await fetchDefaultTopics(accessToken);
 
-        console.log("categoriesRes -> ", categoriesRes);
-        console.log("topicsRes -> ", topicsRes);
+        // console.log("categoriesRes -> ", categoriesRes);
+        // console.log("topicsRes -> ", topicsRes);
 
         setCategories(categoriesRes ?? []);
         setTopics(topicsRes ?? []);
@@ -66,9 +67,11 @@ export default function TopicForm({
     }, [accessToken])
 
     const totalTopics = topics.length;
+
     const allTopicsFlat = useMemo<SelectedTopicView[]>(() => {
         const result: SelectedTopicView[] = [];
-        categories.forEach((cat) => {
+        // categories.forEach((cat) => {
+        (categories || []).forEach((cat) => {
             (cat.defaultTopics || []).forEach((t) => {
                 result.push({
                     id: t.id,
@@ -80,11 +83,12 @@ export default function TopicForm({
         return result;
     }, [categories]);
 
-    const selectedTopics = useMemo<SelectedTopicView[]>(() => {
-        if (!selectedTopicIds.length) return [];
-        const ids = new Set(selectedTopicIds);
+    const topicsOnPage = useMemo<SelectedTopicView[]>(() => {
+        if (!appliedTopicIds.length) return [];
+        const ids = new Set(appliedTopicIds);
         return allTopicsFlat.filter((t) => ids.has(t.id));
-    }, [allTopicsFlat, selectedTopicIds]);
+    }, [allTopicsFlat, appliedTopicIds]);
+
 
     const toggleTopic = (id: number) => {
         setSelectedTopicIds((prev) =>
@@ -92,7 +96,11 @@ export default function TopicForm({
         );
     };
 
-    const handleDone = () => {
+    const handleAddTopicOnPage = () => {
+        setAppliedTopicIds((prev) => {
+            const merged = new Set([...prev, ...selectedTopicIds]);
+            return Array.from(merged);
+        });
         setIsModalOpen(false);
     };
 
@@ -119,13 +127,13 @@ export default function TopicForm({
                 </Link>
             </div>
 
-            {selectedTopics.length > 0 && (
+            {topicsOnPage.length > 0 && (
                 <ul className="flex flex-wrap gap-2 text-xs">
-                    {selectedTopics.map((t) => (
+                    {topicsOnPage.map((t) => (
                         <li
                             key={t.id}
                             className="flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-blue-800"
-                            data-categoryName={t.categoryName}
+                            // data-categoryName={t.categoryName}
                         >
                             <span>{t.name}</span>
                         </li>
@@ -146,6 +154,7 @@ export default function TopicForm({
                     categories={categories}
                     selectedTopicIds={selectedTopicIds}
                     onToggleTopic={toggleTopic}
+                    onAddTopicOnPage={handleAddTopicOnPage}
                 />
             </SideModal>
         </>
