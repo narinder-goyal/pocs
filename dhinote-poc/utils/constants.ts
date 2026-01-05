@@ -11,6 +11,8 @@ export const API_ROUTES = {
     LOGOUT: '/api/v1/auth/logout',
     DEFAULT_TOPICS: '/api/v1/default-topics',
     DEFAULT_TOPICS_CATEGORIES: '/api/v1/default-topics-categories',
+    USER_TOPICS: '/api/v1/user-topics',
+    COLOR_CODE: '/api/v1/color-codes',
 } as const;
 
 export const CLIENT_ID = process.env.NEXT_PUBLIC_API_CLIENT_ID ?? '';

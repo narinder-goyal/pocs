@@ -50,16 +50,23 @@ export default function TopicsByCategory({
                                         <button
                                             type="button"
                                             onClick={() => onToggleTopic(t.id)}
-                                            className={`flex w-full items-center justify-between rounded border px-2 py-1 text-left text-xs ${isSelected
-                                                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                                : 'border-gray-200 bg-white text-gray-800 hover:bg-gray-50'
+                                            className={`flex w-full items-center justify-between rounded-full border px-3 py-2 gap-1 text-left bg-[#D0E2FF] ${isSelected
+                                                ? 'border-[#0043CE]'
+                                                : 'border-transparent'
                                                 }`}
                                         >
-                                            <span>{t.name}</span>
+                                            <span className='text-base/[20px] text-[#0043CE]'>{t.name}</span>
                                             {isSelected && (
-                                                <span className="ml-2 text-[0.65rem] font-semibold uppercase tracking-wide text-blue-600">
-                                                    Done
-                                                </span>
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g clipPath="url(#clip0)">
+                                                        <path d="M8.00016 1.33325C4.32016 1.33325 1.3335 4.31992 1.3335 7.99992C1.3335 11.6799 4.32016 14.6666 8.00016 14.6666C11.6802 14.6666 14.6668 11.6799 14.6668 7.99992C14.6668 4.31992 11.6802 1.33325 8.00016 1.33325ZM6.66683 11.3333L3.3335 7.99992L4.2735 7.05992L6.66683 9.44658L11.7268 4.38659L12.6668 5.33325L6.66683 11.3333Z" fill="#0043CE" />
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0">
+                                                            <rect width="16" height="16" fill="white" />
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
                                             )}
                                         </button>
                                     </li>

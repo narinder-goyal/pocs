@@ -46,8 +46,8 @@ export default function SideModal({
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-strach justify-end bg-black/40" onClick={handleBackdropClick} >
-            <div className="w-full max-w-[716px] rounded-tl-[12px] rounded-bl-[12px] bg-white p-8 pl-5 shadow-lg">
+        <div className="fixed inset-0 z-50 flex items-strach justify-end bg-black/40 bg-blur" onClick={handleBackdropClick} >
+            <div className="w-full max-w-[716px] rounded-tl-[12px] rounded-bl-[12px] bg-white p-8 pl-5 shadow-lg max-h-screen overflow-auto">
                 {title && (
                     <div className="pb-8 flex items-center justify-start gap-1">
                         <button

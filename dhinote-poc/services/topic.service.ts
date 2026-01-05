@@ -35,6 +35,17 @@ export interface DefaultTopicsCategory {
     defaultTopics: DefaultTopicsCategoryTopic[];
 }
 
+export interface UserTopicItemPayload {
+    name: string;
+    color_code_id: number;
+}
+
+export interface UserTopicsPayload {
+    user_id: string;
+    topics: UserTopicItemPayload[];
+    is_skipped: boolean;
+}
+
 export async function fetchDefaultTopics(
     accessToken?: string,
 ): Promise<DefaultTopic[]> {
@@ -56,18 +67,16 @@ export async function fetchDefaultTopics(
     return Array.isArray(data) ? (data as DefaultTopic[]) : [];
 }
 
-
 export async function fetchDefaultTopicCategories(
     accessToken?: string,
 ): Promise<DefaultTopicsCategory[]> {
     const headers: Record<string, string> = { ...jsonHeaders };
-    console.log("------> ", accessToken);
 
+    // console.log("------> ", accessToken);
     if (accessToken) {
         headers.Authorization = `Bearer ${accessToken}`;
     }
-
-    console.log("headers -", headers)
+    // console.log("headers -", headers)
 
     const res = await fetch(`${API_BASE_URL}${API_ROUTES.DEFAULT_TOPICS_CATEGORIES}`, {
         method: 'GET',
@@ -76,8 +85,28 @@ export async function fetchDefaultTopicCategories(
     });
 
     const data = await handleResponse(res);
-
-    console.log("acctoc:- ", res);
-
+    // console.log("acctoc:- ", res);
     return Array.isArray(data) ? (data as DefaultTopicsCategory[]) : [];
+}
+
+export async function saveUserTopics(
+    payload: UserTopicsPayload,
+    accessToken?: string,
+) {
+
+    // console.log("saveUserTopics --> ", accessToken);
+    if (!accessToken) {
+        throw new Error('Missing access token');
+    }
+
+    const res = await fetch(`${API_BASE_URL}${API_ROUTES.USER_TOPICS}`, {
+        method: 'POST',
+        headers: {
+            ...jsonHeaders,
+            Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(payload),
+    });
+    // console.log("saveUserTopics RES:- ", res);
+    return handleResponse(res);
 }
