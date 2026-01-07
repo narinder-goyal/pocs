@@ -53,12 +53,10 @@ export default function SignupPage() {
             </div>
             <SignUpForm />
 
-            {/* Login Link */}
             <p className="text-center text-sm text-[#248B77] font-medium">
                 Already have an account? <Link href="/login" className="font-bold hover:underline underline-offset-2">Log in</Link>
             </p>
 
-            {/* Terms */}
             <p className="text-center text-xs text-slate-600 mt-6 leading-relaxed">
                 By Creating Account you accept our <Link href="#" className="font-bold text-[#248B77] underline underline-offset-2 decoration-1 hover:text-[#1e7564]">Terms and Conditions</Link> and <Link href="#" className="font-bold text-[#248B77] underline underline-offset-2 decoration-1 hover:text-[#1e7564]">Privacy Policy</Link>
             </p>

@@ -7,15 +7,12 @@ import { useForm } from "react-hook-form";
 import { useRouter } from 'next/navigation';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormValues, loginSchema } from "@/schemas/login.schema";
-// import { useLoginMutation } from "@/lib/redux/auth/authApi";
-// import { User } from "@/types/user";
 import { signIn, getSession } from "next-auth/react";
 
 
 export default function LoginForm() {
     const router = useRouter();
-    // const [login, { isLoading }] = useLoginMutation();
-
+  
     const {
         register,
         handleSubmit,
@@ -28,19 +25,12 @@ export default function LoginForm() {
 
     const onSubmit = async (data: LoginFormValues) => {
         try {
-            // await login({
-            //     email: data.email,
-            //     password: data.password,
-            // });
 
             const res = await signIn("credentials", {
-                // ...data,
                 email: data.email,
                 password: data.password,
                 redirect: false,
             });
-
-            console.log('signIn result:', res);
 
             if (res?.error) {
                 toast.error(res.error || 'Invalid email or password');
@@ -62,10 +52,6 @@ export default function LoginForm() {
                 router.push("/intract");
             }
         } catch (e: any) {
-            // alert(e.message || "Login failed");
-            // const message = (e as string) || 'Unable to login';           
-            // alert(e?.message || e?.error || JSON.stringify(e));
-            console.log("LOGIN ERROR :-", e);
             toast.error(e?.data?.message || "Login Failed");
         }
     };
@@ -73,17 +59,14 @@ export default function LoginForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5 mb-2">
             <Input label="Email" placeholder="Email" {...register("email")} error={errors.email?.message} />
-            {/* {errors.email && ( <p className="text-red-500 text-sm mt-1"> {errors.email.message} </p> )} */}
 
             <Input label="Password" type="password" placeholder="Password"
                 {...register("password")}
                 error={errors.password?.message}
                 autoComplete="current-password"
             />
-            {/* {errors.password && ( <p className="text-red-500 text-sm mt-1"> {errors.password.message} </p> )} */}
 
             <Button type="submit" className="w-full"
-            // loading={isLoading}
             >Login</Button>
         </form>
     )

@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema, SignUpFormValues } from '@/schemas/signup.schema';
-// import { useRegisterMutation } from "@/lib/redux/auth/authApi";
 import { registerUser } from "@/services/auth.service";
 import { signIn } from 'next-auth/react';
 
@@ -45,13 +44,6 @@ export default function Signup() {
                 password: data.password,
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             });
-
-            // const result = await signIn('credentials', {
-            //     email: data.email,
-            //     password: data.password,
-            //     redirect: false,
-            // });
-            // if (result?.error) {router.push('/login');} else {router.push('/dashboard');}
 
             toast.success("Registration Success");
             setIsConfirmationOpen(true);
@@ -94,28 +86,27 @@ export default function Signup() {
             <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5  mb-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                        {/* <label htmlFor="firstName" className="block text-sm font-medium text-slate-600">First Name</label> */}
+                      
                         <Input label="First Name" placeholder="First Name" {...register("firstName")} error={errors.firstName?.message} />
-                        {/* {errors.firstName && (<p className="text-red-500 text-sm mt-1"> {errors.firstName.message}</p> )} */}
                     </div>
                     <div className="space-y-1.5">
-                        {/* <label htmlFor="lastName" className="block text-sm font-medium text-slate-600">Last Name</label> */}
+                       
                         <Input label="Last Name" placeholder="Last Name" {...register("lastName")} error={errors.lastName?.message} />
-                        {/* {errors.lastName && ( <p className="text-red-500 text-sm mt-1"> {errors.lastName.message} </p> )} */}
+                       
                     </div>
                 </div>
 
                 <div className="space-y-1.5">
-                    {/* <label htmlFor="email" className="block text-sm font-medium text-slate-600">Email</label> */}
+                    
                     <Input label="Email" placeholder="Email" {...register("email")} error={errors.email?.message} />
-                    {/* {errors.email && ( <p className="text-red-500 text-sm mt-1"> {errors.email.message} </p> )} */}
+                   
                 </div>
 
                 <div className="space-y-1.5">
-                    {/* <label htmlFor="password" className="block text-sm font-medium text-slate-600">Password</label> */}
+                  
                     <div className="relative">
                         <Input label="Password" type="password" placeholder="Password" {...register("password")} error={errors.password?.message} />
-                        {/* {errors.password && ( <p className="text-red-500 text-sm mt-1">{errors.password.message}</p> )} */}
+                      
 
                         <button
                             type="button"
@@ -128,12 +119,11 @@ export default function Signup() {
                     </div>
                 </div>
 
-                {/* Confirm Password */}
                 <div className="space-y-1.5">
-                    {/* <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-600">Confirm Password</label> */}
+               
                     <div className="relative">
                         <Input label="Confirm Password" type="password" placeholder="Confirm Password" {...register("confirmPassword")} error={errors.confirmPassword?.message} />
-                        {/* {errors.confirmPassword && ( <p className="text-red-500 text-sm mt-1"> {errors.confirmPassword.message}</p> )} */}
+                       
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -145,22 +135,21 @@ export default function Signup() {
                     </div>
                 </div>
 
-                {/* Submit Button */}
+            
                 <div className="pt-2">
                     <Button
                         type="submit"
                         className="w-full"
                         disabled={isSubmitting}
-                    // loading={isLoading}
                     >
                         Create Account
-                        {/* {isSubmitting ? "Creating..." : "Create Account"} */}
+                       
                     </Button>
                 </div>
 
             </form>
 
-            {/* Confirmation Modal */}
+          
             <Modal
                 isOpen={isConfirmationOpen}
                 onClose={() => setIsConfirmationOpen(false)}

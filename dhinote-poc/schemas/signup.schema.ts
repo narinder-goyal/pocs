@@ -27,7 +27,6 @@ export const signupSchema = yup.object({
         .string()
         .required('Confirm Password is required')
         .oneOf([yup.ref('password')], 'Passwords do not match'),
-    // phone: yup.string().optional(),
 });
 
 export type SignUpFormValues = yup.InferType<typeof signupSchema>;

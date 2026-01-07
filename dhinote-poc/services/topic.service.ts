@@ -5,7 +5,6 @@ import { API_BASE_URL, API_ROUTES } from "@/utils/constants";
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
 async function handleResponse(res: Response) {
-    console.log(res);
     const data = await res.json().catch(() => null);
     if (!res.ok) {
         throw new Error(data?.message || data?.error || 'Request failed');
@@ -62,8 +61,6 @@ export async function fetchDefaultTopics(
 
     const data = await handleResponse(res);
 
-    console.log("fetch_Default_Topics-", res);
-
     return Array.isArray(data) ? (data as DefaultTopic[]) : [];
 }
 
@@ -72,11 +69,9 @@ export async function fetchDefaultTopicCategories(
 ): Promise<DefaultTopicsCategory[]> {
     const headers: Record<string, string> = { ...jsonHeaders };
 
-    // console.log("------> ", accessToken);
     if (accessToken) {
         headers.Authorization = `Bearer ${accessToken}`;
     }
-    // console.log("headers -", headers)
 
     const res = await fetch(`${API_BASE_URL}${API_ROUTES.DEFAULT_TOPICS_CATEGORIES}`, {
         method: 'GET',
@@ -85,7 +80,6 @@ export async function fetchDefaultTopicCategories(
     });
 
     const data = await handleResponse(res);
-    // console.log("acctoc:- ", res);
     return Array.isArray(data) ? (data as DefaultTopicsCategory[]) : [];
 }
 
@@ -94,7 +88,6 @@ export async function saveUserTopics(
     accessToken?: string,
 ) {
 
-    // console.log("saveUserTopics --> ", accessToken);
     if (!accessToken) {
         throw new Error('Missing access token');
     }
@@ -107,6 +100,5 @@ export async function saveUserTopics(
         },
         body: JSON.stringify(payload),
     });
-    // console.log("saveUserTopics RES:- ", res);
     return handleResponse(res);
 }

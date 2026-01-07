@@ -1,7 +1,3 @@
-// export default function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-//     return <input {...props} className="w-full border px-3 py-2 rounded" />;
-// }
-
 "use client";
 import { forwardRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";

@@ -6,7 +6,6 @@ export async function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const isFirstTimeLoggedIn = (token?.user as any)?.is_first_time_logged_in;
 
-  console.log("path name",pathname)
   if (!token && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", req.url));
   }

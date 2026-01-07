@@ -17,7 +17,3 @@ export const API_ROUTES = {
 
 export const CLIENT_ID = process.env.NEXT_PUBLIC_API_CLIENT_ID ?? '';
 export const CLIENT_SECRET = process.env.NEXT_PUBLIC_API_CLIENT_SECRET ?? '';
-
-// export const ACCESS_TOKEN_KEY = 'accessToken';
-// export const REFRESH_TOKEN_KEY = 'refreshToken';
-// export const USER_KEY = 'authUser';

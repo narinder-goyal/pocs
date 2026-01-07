@@ -10,7 +10,6 @@ export default async function DashboardPage() {
 
 
   const session = await getServerSession(authOptions);
-  console.log("session", session)
 
   if (!session) {
     redirect('/login');
@@ -20,7 +19,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="w-full max-w-[520px] mx-auto flex flex-col items-center">
-      {/* Intract ----- {user?.first_name} {user?.last_name} */}
       <div className='flex flex-col items-center text-center w-full mb-8'>
         <div className="mb-6 flex flex-col items-center">
           <Link href="/" className="w-12 h-12 mb-2 text-[#2AB09C]">

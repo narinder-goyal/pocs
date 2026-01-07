@@ -49,24 +49,13 @@ export default function TopicForm({
     const user = session?.user;
     const userId = session?.user.id;
 
-    console.log("userId- ", userId);
-
-    // const user = session?.user as any | undefined;
-    // const userId = user?.id as string | undefined;
-
     const [topics, setTopics] = useState<DefaultTopic[]>(initialTopics);
     const [categories, setCategories] = useState<DefaultTopicsCategory[]>(initialCategories);
 
-    // console.log("session   -> ", session)
-
     const fechDefTopic = async () => {
-        // console.log("accessToken -> ", accessToken);
 
         const categoriesRes = await fetchDefaultTopicCategories(accessToken);
         const topicsRes = await fetchDefaultTopics(accessToken);
-
-        // console.log("categoriesRes -> ", categoriesRes);
-        // console.log("topicsRes -> ", topicsRes);
 
         setCategories(categoriesRes ?? []);
         setTopics(topicsRes ?? []);
@@ -82,7 +71,6 @@ export default function TopicForm({
 
     const allTopicsFlat = useMemo<TopicView[]>(() => {
         const result: TopicView[] = [];
-        // categories.forEach((cat) => {
         (categories || []).forEach((cat) => {
             (cat.defaultTopics || []).forEach((t) => {
                 result.push({
@@ -169,7 +157,7 @@ export default function TopicForm({
             toast.success("Topics saved");
             router.push("/dashboard");
         } catch (err: any) {
-            console.error("Failed to save user topics", err);
+           
             toast.error(err?.message || "Failed to save topics");
         }
     };
@@ -213,7 +201,6 @@ export default function TopicForm({
                             <li
                                 key={t.id}
                                 className="flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-blue-800"
-                                // data-id={t.id} data-categoryName={t.categoryName}
                             >
                                 <span>{t.name}</span>
                             </li>
@@ -230,7 +217,7 @@ export default function TopicForm({
                 </>
             )}
 
-            {/* Topics SideModal */}
+        
             <SideModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

@@ -64,24 +64,6 @@ export default function SideModal({
 
                 {children}
 
-                {/* <div className="flex justify-end gap-2">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                        {secondaryActionLabel}
-                    </button>
-                    {primaryActionLabel && onPrimaryAction && (
-                        <button
-                            type="button"
-                            onClick={onPrimaryAction}
-                            className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
-                        >
-                            {primaryActionLabel}
-                        </button>
-                    )}
-                </div> */}
             </div>
         </div>
     );

@@ -5,7 +5,6 @@ export default function Home() {
   return (
     <div className="container mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-      {/* Left Content */}
       <div className="space-y-[40px] text-center w-[446px]">
         <h1 className="flex items-center justify-center gap-1 font-jakarta text-[60px] font-semibold text-[#4A4A4A]">
           <Image
@@ -56,7 +55,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Right Visual */}
       <div className="relative flex justify-center">
         <div className="relative w-full max-w-xl">
           <Image
