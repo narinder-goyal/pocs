@@ -4,12 +4,24 @@ import { API_BASE_URL, API_ROUTES } from "@/utils/constants";
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
-async function handleResponse(res: Response) {
-    const data = await res.json().catch(() => null);
-    if (!res.ok) {
-        throw new Error(data?.message || data?.error || 'Request failed');
+async function handleResponse<T = unknown>(res: Response): Promise<T> {
+    const text = await res.text();
+    let data: T | null = null;
+    try {
+        data = text ? (JSON.parse(text) as T) : null;
+    } catch {
     }
-    return data;
+    if (!res.ok) {
+        console.error('API error:', {
+            status: res.status,
+            statusText: res.statusText,
+            body: text,
+        });
+        const msg = (data as any)?.message || (data as any)?.error;
+        throw new Error(msg || `Request failed with status ${res.status}`);
+    }
+    
+    return data!;
 }
 
 export interface DefaultTopicsCategoryRef {
@@ -45,6 +57,13 @@ export interface UserTopicsPayload {
     is_skipped: boolean;
 }
 
+export interface ColorCode {
+    id: number;
+    text_color_code: string;
+    bg_color_code: string;
+    is_active: boolean;
+}
+
 export async function fetchDefaultTopics(
     accessToken?: string,
 ): Promise<DefaultTopic[]> {
@@ -60,7 +79,6 @@ export async function fetchDefaultTopics(
     });
 
     const data = await handleResponse(res);
-
     return Array.isArray(data) ? (data as DefaultTopic[]) : [];
 }
 
@@ -101,4 +119,22 @@ export async function saveUserTopics(
         body: JSON.stringify(payload),
     });
     return handleResponse(res);
+}
+
+export async function fetchColorCodes(
+    accessToken?: string,
+): Promise<ColorCode[]> {
+    const headers: Record<string, string> = { ...jsonHeaders };
+    if (accessToken) {
+        headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    const res = await fetch(`${API_BASE_URL}${API_ROUTES.COLOR_CODE}`, {
+        method: 'GET',
+        headers,
+        cache: 'no-store',
+    });
+
+    const data = await handleResponse(res);
+    return Array.isArray(data) ? (data as ColorCode[]) : [];
 }

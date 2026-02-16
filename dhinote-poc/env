@@ -1,0 +1,7 @@
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=super-secret-key
+
+NEXT_PUBLIC_API_BASE_URL=https://gop-dev-api-dhinotem.agilecollab.com
+
+NEXT_PUBLIC_API_CLIENT_ID=fhA9cTe71kQ2bMw8rYs
+NEXT_PUBLIC_API_CLIENT_SECRET=kA7r2mQw91BdE4sT8ntX6cV3yuPpL0rGhJ

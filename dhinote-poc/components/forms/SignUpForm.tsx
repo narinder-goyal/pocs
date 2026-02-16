@@ -14,6 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema, SignUpFormValues } from '@/schemas/signup.schema';
 import { registerUser } from "@/services/auth.service";
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 
 export default function Signup() {
@@ -48,7 +50,7 @@ export default function Signup() {
             toast.success("Registration Success");
             setIsConfirmationOpen(true);
 
-            router.push('/login');
+            // router.push('/login');
 
         } catch (e: any) {
             const msg = e?.message || '';
@@ -86,27 +88,27 @@ export default function Signup() {
             <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-5  mb-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-1.5">
-                      
+
                         <Input label="First Name" placeholder="First Name" {...register("firstName")} error={errors.firstName?.message} />
                     </div>
                     <div className="space-y-1.5">
-                       
+
                         <Input label="Last Name" placeholder="Last Name" {...register("lastName")} error={errors.lastName?.message} />
-                       
+
                     </div>
                 </div>
 
                 <div className="space-y-1.5">
-                    
+
                     <Input label="Email" placeholder="Email" {...register("email")} error={errors.email?.message} />
-                   
+
                 </div>
 
                 <div className="space-y-1.5">
-                  
+
                     <div className="relative">
                         <Input label="Password" type="password" placeholder="Password" {...register("password")} error={errors.password?.message} />
-                      
+
 
                         <button
                             type="button"
@@ -120,10 +122,10 @@ export default function Signup() {
                 </div>
 
                 <div className="space-y-1.5">
-               
+
                     <div className="relative">
                         <Input label="Confirm Password" type="password" placeholder="Confirm Password" {...register("confirmPassword")} error={errors.confirmPassword?.message} />
-                       
+
                         <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -135,7 +137,7 @@ export default function Signup() {
                     </div>
                 </div>
 
-            
+
                 <div className="pt-2">
                     <Button
                         type="submit"
@@ -143,29 +145,27 @@ export default function Signup() {
                         disabled={isSubmitting}
                     >
                         Create Account
-                       
+
                     </Button>
                 </div>
 
             </form>
 
-          
             <Modal
                 isOpen={isConfirmationOpen}
                 onClose={() => setIsConfirmationOpen(false)}
-                title="Confirmation Mail Sent"
-                primaryActionLabel="Go to Login"
+                primaryActionLabel="Close"
                 onPrimaryAction={handleGoToLogin}
             >
-                <p className="mb-2">
-                    We&apos;ve sent a confirmation email to{' '}
-                    <span className="font-medium">{registeredEmail}</span>.
-                </p>
-                <p>
-                    Please check your inbox and click the verification link to
-                    confirm your email address. Once verified, you can log in and
-                    start using DhiNote.
-                </p>
+                <Image
+                    src="/images/msg_img.png"
+                    alt="msg logo"
+                    width={180}
+                    height={180}
+                    className="mx-auto mb-3"
+                />
+                <h3 className="h3 mb-2 text-2xl font-bold">Confirmation Mail Sent</h3>
+                <p>Hey there! We've just sent you a confirmation email. Could you please check your inbox and confirm your email address? This will help you get started with logging in. Thanks a bunch!</p>
             </Modal>
         </>
     );

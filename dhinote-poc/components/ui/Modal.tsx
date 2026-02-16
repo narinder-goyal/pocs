@@ -46,45 +46,35 @@ export default function Modal({
     };
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-blur"
-            onClick={handleBackdropClick}
-        >
-            <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-                <div className="mb-3 flex items-center justify-between">
-                    {title && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-blur">
+            <div className="w-full max-w-md rounded-lg bg-white p-5 shadow-lg text-center">
+                {title && (
+                    <div className="mb-3 flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-                    )}
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600"
-                        aria-label="Close"
-                    >
-                        ×
-                    </button>
-                </div>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="text-gray-400 hover:text-gray-600"
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+                    </div>
+                )}
 
                 <div className="mb-4 text-sm text-gray-700">{children}</div>
 
-                <div className="flex justify-end gap-2">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="rounded-md border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                        {secondaryActionLabel}
-                    </button>
-                    {primaryActionLabel && onPrimaryAction && (
+                {primaryActionLabel && onPrimaryAction && (
+                    <div className="flex justify-center  gap-2">
                         <button
                             type="button"
                             onClick={onPrimaryAction}
-                            className="rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+                            className="flex items-center justify-center gap-3 px-4 py-2.5 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-slate-200"
                         >
                             {primaryActionLabel}
                         </button>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

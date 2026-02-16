@@ -9,11 +9,21 @@ import { useRouter } from 'next/navigation';
 import SideModal from "../ui/SideModal";
 import TopicsByCategory from "../topic/TopicsByCategory";
 
-import { fetchDefaultTopics, fetchDefaultTopicCategories, saveUserTopics } from '@/services/topic.service';
-import type { DefaultTopic, DefaultTopicsCategory } from '@/services/topic.service';
+import {
+    fetchDefaultTopics,
+    fetchDefaultTopicCategories,
+    saveUserTopics,
+    fetchColorCodes
+} from '@/services/topic.service';
+import type {
+    DefaultTopic,
+    DefaultTopicsCategory,
+    ColorCode
+} from '@/services/topic.service';
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import TopicsList from "../topic/TopicsList";
 
 
 interface TopicClientProps {
@@ -25,7 +35,11 @@ interface TopicClientProps {
 interface TopicView {
     id: number;
     name: string;
-    categoryName: string;
+    categoryName?: string;
+    colorCodeId?: number;
+    bgColor?: string;
+    textColor?: string;
+    sourceTopicId?: number;
 }
 
 export default function TopicForm({
@@ -40,27 +54,37 @@ export default function TopicForm({
     const [selectedTopicIds, setSelectedTopicIds] = useState<number[]>([]);
     const [appliedTopicIds, setAppliedTopicIds] = useState<number[]>([]);
     const [customTopicsOnPage, setCustomTopicsOnPage] = useState<TopicView[]>([]);
+    const [modalTopicsOnPage, setModalTopicsOnPage] = useState<TopicView[]>([]);
+
     const [topicName, setTopicName] = useState("");
 
     const { data: session } = useSession();
     const accessToken = (session as any)?.user?.accessToken;
-
 
     const user = session?.user;
     const userId = session?.user.id;
 
     const [topics, setTopics] = useState<DefaultTopic[]>(initialTopics);
     const [categories, setCategories] = useState<DefaultTopicsCategory[]>(initialCategories);
+    const [colorCodes, setColorCodes] = useState<ColorCode[]>([]);
 
     const fechDefTopic = async () => {
+        try {
+            if (accessToken) {
+                const categoriesRes = await fetchDefaultTopicCategories(accessToken);
+                const topicsRes = await fetchDefaultTopics(accessToken);
+                const colorCodesRes = await fetchColorCodes(accessToken);
+                setCategories(categoriesRes ?? []);
+                setTopics(topicsRes ?? []);
+                setColorCodes(colorCodesRes ?? []);
 
-        const categoriesRes = await fetchDefaultTopicCategories(accessToken);
-        const topicsRes = await fetchDefaultTopics(accessToken);
+                return { categoriesRes, topicsRes, colorCodesRes };
+            }
 
-        setCategories(categoriesRes ?? []);
-        setTopics(topicsRes ?? []);
-
-        return { categoriesRes, topicsRes };
+        } catch (err: any) {
+            console.error("Failed to load data", err);
+            toast.error(err?.message || "Failed to load Data");
+        }
     }
 
     useEffect(() => {
@@ -72,7 +96,8 @@ export default function TopicForm({
     const allTopicsFlat = useMemo<TopicView[]>(() => {
         const result: TopicView[] = [];
         (categories || []).forEach((cat) => {
-            (cat.defaultTopics || []).forEach((t) => {
+            const list = (cat as any).defaultTopics ?? (cat as any).default_topics ?? [];
+            list.forEach((t: any) => {
                 result.push({
                     id: t.id,
                     name: t.name,
@@ -83,6 +108,12 @@ export default function TopicForm({
         return result;
     }, [categories]);
 
+    const pickRandomColor = (): ColorCode | undefined => {
+        if (!colorCodes.length) return undefined;
+        const idx = Math.floor(Math.random() * colorCodes.length);
+        return colorCodes[idx];
+    };
+
     const defaultTopicsOnPage = useMemo<TopicView[]>(() => {
         if (!appliedTopicIds.length) return [];
         const ids = new Set(appliedTopicIds);
@@ -90,8 +121,8 @@ export default function TopicForm({
     }, [allTopicsFlat, appliedTopicIds]);
 
     const topicsOnPage = useMemo<TopicView[]>(() => {
-        return [...defaultTopicsOnPage, ...customTopicsOnPage];
-    }, [defaultTopicsOnPage, customTopicsOnPage]);
+        return [...defaultTopicsOnPage, ...modalTopicsOnPage, ...customTopicsOnPage];
+    }, [defaultTopicsOnPage, modalTopicsOnPage, customTopicsOnPage]);
 
 
     const toggleTopic = (id: number) => {
@@ -101,9 +132,40 @@ export default function TopicForm({
     };
 
     const handleAddTopicOnPage = () => {
-        setAppliedTopicIds((prev) => {
-            const merged = new Set([...prev, ...selectedTopicIds]);
-            return Array.from(merged);
+        setModalTopicsOnPage((prev) => {
+            const existingBySourceId = new Map<number, TopicView>();
+
+            prev.forEach((t) => {
+                if (t.sourceTopicId != null) {
+                    existingBySourceId.set(t.sourceTopicId, t);
+                }
+            });
+
+            const newList: TopicView[] = [];
+
+            selectedTopicIds.forEach((bid) => {
+                const base = allTopicsFlat.find((t) => t.id === bid);
+
+                if (!base) return;
+
+                const existing = existingBySourceId.get(bid);
+
+                if (existing) {
+                    newList.push(existing);
+                } else {
+                    const color = pickRandomColor();
+                    newList.push({
+                        id: Date.now() + bid,
+                        sourceTopicId: bid,
+                        name: base.name,
+                        categoryName: base.categoryName,
+                        colorCodeId: color?.id,
+                        bgColor: color?.bg_color_code,
+                        textColor: color?.text_color_code,
+                    });
+                }
+            });
+            return newList;
         });
         setIsModalOpen(false);
     };
@@ -118,11 +180,15 @@ export default function TopicForm({
             toast.error("Please enter a topic name");
             return;
         }
+        const color = pickRandomColor();
 
         const newTopic: TopicView = {
             id: Date.now(),
             name: trimmed,
             categoryName: "Custom",
+            colorCodeId: color?.id,
+            bgColor: color?.bg_color_code,
+            textColor: color?.text_color_code,
         };
 
         setCustomTopicsOnPage((prev) => [...prev, newTopic]);
@@ -142,12 +208,13 @@ export default function TopicForm({
             toast.error("Please add at least one topic or skip");
             return;
         }
+        const defaultColorId = topicsOnPage.find((t) => t.colorCodeId)?.colorCodeId ?? colorCodes[0]?.id ?? 0;
 
         const payload = {
             user_id: userId,
             topics: topicsOnPage.map((t) => ({
                 name: t.name,
-                color_code_id: 1,
+                color_code_id: t.colorCodeId ?? defaultColorId,
             })),
             is_skipped: false,
         };
@@ -157,7 +224,6 @@ export default function TopicForm({
             toast.success("Topics saved");
             router.push("/dashboard");
         } catch (err: any) {
-           
             toast.error(err?.message || "Failed to save topics");
         }
     };
@@ -185,39 +251,29 @@ export default function TopicForm({
                         >Create Topic</Button>
                     </div>
                 </div>
+
+
+                <div className='p-[14px] flex justify-center'>
+                    <Link href="/dashboard" className="flex items-center gap-2">Skip for Now
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0)"><path d="M7 7H17V10L21 6L17 2V5H5V11H7V7ZM17 17H7V14L3 18L7 22V19H19V13H17V17Z" fill="#606060" /></g><defs><clipPath id="clip0"> <rect width="24" height="24" fill="white" /> </clipPath></defs></svg>
+                    </Link>
+                </div>
+
+                {topicsOnPage.length > 0 && (
+                    <>
+                        <TopicsList topics={topicsOnPage} />
+
+                        <div className="basis-1/2 mt-auto mx-auto pb-2 w-full md:w-[60%]">
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                onClick={handleContinue}
+                            >Continue</Button>
+                        </div>
+                    </>
+                )}
             </form>
 
-
-            <div className='p-[14px]'>
-                <Link href="/dashboard" className="flex items-center gap-2">Skip for Now
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g clipPath="url(#clip0)"><path d="M7 7H17V10L21 6L17 2V5H5V11H7V7ZM17 17H7V14L3 18L7 22V19H19V13H17V17Z" fill="#606060" /></g><defs><clipPath id="clip0"> <rect width="24" height="24" fill="white" /> </clipPath></defs></svg>
-                </Link>
-            </div>
-
-            {topicsOnPage.length > 0 && (
-                <>
-                    <ul className="flex flex-wrap gap-2 text-xs mb-6">
-                        {topicsOnPage.map((t) => (
-                            <li
-                                key={t.id}
-                                className="flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-blue-800"
-                            >
-                                <span>{t.name}</span>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <div className="basis-1/2 mt-auto w-full">
-                        <Button
-                            type="submit"
-                            className="w-full"
-                            onClick={handleContinue}
-                        >Continue</Button>
-                    </div>
-                </>
-            )}
-
-        
             <SideModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
